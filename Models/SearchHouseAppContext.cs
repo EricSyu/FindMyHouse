@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HouseViewer.Models
 {
-    public partial class search_house_appContext : DbContext
+    public partial class SearchHouseAppContext : DbContext
     {
-        public search_house_appContext()
+        public SearchHouseAppContext()
         {
         }
 
-        public search_house_appContext(DbContextOptions<search_house_appContext> options)
+        public SearchHouseAppContext(DbContextOptions<SearchHouseAppContext> options)
             : base(options)
         {
         }
