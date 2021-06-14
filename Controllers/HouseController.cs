@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HouseViewer.Models;
+using HouseViewer.ViewModels;
+using Omu.ValueInjecter;
 
 namespace HouseViewer.Controllers
 {
@@ -19,9 +21,12 @@ namespace HouseViewer.Controllers
         }
 
         [HttpGet("")]
-        public ActionResult<IEnumerable<House>> GetHouses()
+        public ActionResult<IEnumerable<HouseRead>> GetHouses()
         {
-            List<House> houses = searchHouseAppContext.Houses.ToList();
+            var houses = searchHouseAppContext.Houses
+                            .Select(h => new HouseRead().InjectFrom(h) as HouseRead)
+                            .ToList();
+
             return houses;
         }
 
