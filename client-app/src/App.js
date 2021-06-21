@@ -1,27 +1,42 @@
-import {React, useState, useEffect} from 'react';
+/* eslint-disable react/jsx-key */
+import { React, useState, useEffect, useMemo } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import './App.css';
 
 import { Navbar, Container, Row, Col } from 'react-bootstrap';
-import BootstrapTable from 'react-bootstrap-table-next';
+import { useTable } from 'react-table';
 
 function App() {
     const [houses, setHouses] = useState([])
-    const columns = [
+    const tableData = useMemo(() => houses, [houses]);
+    const tableCols = useMemo(() => [
         {
-            dataField: 'id',
-            text: 'id'
+            accessor: 'id',
+            Header: 'id'
         }, 
         {
-            dataField: 'title',
-            text: '標題'
+            accessor: 'title',
+            Header: '標題'
         }, 
         {
-            dataField: 'price',
-            text: '價格'
-        }];
+            Header: '價格2'
+        },
+        {
+            Header: '價格3'
+        },
+        {
+            Header: '價格4'
+        }
+    ], []);
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+      } = useTable({ columns: tableCols, data: tableData });
     
     useEffect(() => {
         fetchHouseData();
@@ -46,7 +61,45 @@ function App() {
                 <Container fluid>
                     <Row>
                         <Col>
-                            <BootstrapTable keyField='id' data={houses} columns={columns} wrapperClasses="table-responsive"/>
+                            <div className="table-responsive text-nowrap">
+                                <table className="table table-hover table-bordered" {...getTableProps()}>
+                                    <thead>
+                                        {
+                                            headerGroups.map(headerGroup => (
+                                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                                    {
+                                                        headerGroup.headers.map(column => (
+                                                            <th scope="col" {...column.getHeaderProps()}>
+                                                                {column.render('Header')}
+                                                            </th>
+                                                        ))
+                                                    }
+                                                </tr>
+                                            ))
+                                        }
+                                    </thead>
+                                    <tbody {...getTableBodyProps()}>
+                                        {
+                                            rows.map(row => {
+                                                prepareRow(row)
+                                                return (
+                                                    <tr {...row.getRowProps()}>
+                                                        {
+                                                            row.cells.map(cell => {
+                                                                return (
+                                                                    <td {...cell.getCellProps()}>
+                                                                        {cell.render('Cell')}
+                                                                    </td>
+                                                                )
+                                                            })
+                                                        }
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </Col>
                     </Row>
                 </Container>
