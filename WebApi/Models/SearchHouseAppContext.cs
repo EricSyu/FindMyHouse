@@ -51,7 +51,7 @@ namespace HouseViewer.Models
                     .HasMaxLength(255)
                     .HasColumnName("data_from");
 
-                entity.Property(e => e.Discard).HasColumnName("discard");
+                entity.Property(e => e.FavoriteRanking).HasColumnName("favorite_ranking");
 
                 entity.Property(e => e.Floor)
                     .IsRequired()
@@ -70,13 +70,7 @@ namespace HouseViewer.Models
                     .HasMaxLength(255)
                     .HasColumnName("link");
 
-                entity.Property(e => e.Other)
-                    .HasMaxLength(255)
-                    .HasColumnName("other");
-
                 entity.Property(e => e.Price).HasColumnName("price");
-
-                entity.Property(e => e.Rank).HasColumnName("rank");
 
                 entity.Property(e => e.RecordTime)
                     .HasColumnType("datetime")
@@ -101,6 +95,11 @@ namespace HouseViewer.Models
                     .IsRequired()
                     .HasMaxLength(255)
                     .HasColumnName("shape");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("status");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
