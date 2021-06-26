@@ -11,6 +11,7 @@ namespace HouseViewer.ViewModels
         public string Region { get; set; }
         public string Section { get; set; }
         public string Title { get; set; }
+        public string Status { get; set; }
         public string Carport { get; set; }
         public string Room { get; set; }
         public string Floor { get; set; }
@@ -19,10 +20,9 @@ namespace HouseViewer.ViewModels
         public float UnitPrice { get; set; }
         public int Price { get; set; }
         public string Link { get; set; }
-        public string Other { get; set; }
         public string DataFrom { get; set; }
         public DateTime RecordTime { get; set; }
-        public int Rank { get; set; }
+        public int FavoriteRanking { get; set; }
         public string Comment { get; set; }
     }
 }
