@@ -3,6 +3,7 @@ import { Navbar, Container, Row, Col } from 'react-bootstrap';
 import { Table } from 'antd';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'antd/dist/antd.css'
 import './App.css';
 
@@ -20,10 +21,10 @@ function App() {
     { dataIndex: 'houseAge', key: 'houseAge', title: '屋齡' },
     { dataIndex: 'unitPrice', key: 'unitPrice', title: '單價(萬/坪)' },
     { dataIndex: 'price', key: 'price', title: '總價(萬)' },
-    { dataIndex: 'link', key: 'link', title: '連結' },
+    { dataIndex: 'comment', key: 'comment', title: '備註' },
+    { dataIndex: 'link', key: 'link', title: '連結', render: renderLink },
     { dataIndex: 'dataFrom', key: 'dataFrom', title: '資料來源' },
-    { dataIndex: 'recordTime', key: 'recordTime', title: '紀錄時間' },
-    { dataIndex: 'comment', key: 'comment', title: '備註' }
+    { dataIndex: 'recordTime', key: 'recordTime', title: '紀錄時間' }
   ];
 
   useEffect(() => {
@@ -34,6 +35,14 @@ function App() {
       let response = await fetch("api/House");
       let jsonData = await response.json();
       setHouses(jsonData);
+  }
+
+  function renderLink(text) {
+    return (
+      <a href={text} target="_blank" rel="noopener noreferrer">
+        <i className="bi bi-link-45deg"></i>
+      </a>
+    )
   }
 
   return (
