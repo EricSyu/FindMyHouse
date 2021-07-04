@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using HouseViewer.Models;
 using HouseViewer.ViewModels;
 using Omu.ValueInjecter;
+using WebApi.ViewModels;
 
 namespace HouseViewer.Controllers
 {
@@ -43,9 +44,19 @@ namespace HouseViewer.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutHouse(int id, House model)
+        public IActionResult PutHouse(string id, HouseWrite model)
         {
-            return NoContent();
+            var house = searchHouseAppContext.Houses
+                            .Where(h => h.Id == id)
+                            .FirstOrDefault();
+            if (house == null)
+            {
+                return NoContent();
+            }
+
+            house.InjectFrom(model);
+            searchHouseAppContext.SaveChanges();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
