@@ -23,10 +23,8 @@ export function HouseTable() {
     { dataIndex: 'dataFrom', key: 'dataFrom', title: '資料來源' },
     { dataIndex: 'recordTime', key: 'recordTime', title: '紀錄時間' }
   ];
-  const [show, setShow] = useState(false);
-  const [editedHouse, setEditedHouse] = useState({});
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [showModal, setShowModal] = useState(false);
+  const [editedHouse, setEditedHouse] = useState(null);
 
   useEffect(() => {
     fetchHouseData();
@@ -56,13 +54,13 @@ export function HouseTable() {
 
   function editComment(house) {
     setEditedHouse(house);
-    handleShow();
+    setShowModal(true);
   }
 
   return (
     <Fragment>
       <Table columns={columns} dataSource={houses} rowKey={house => house.id} scroll={{ x: 'max-content' }} />
-      <EditModal show={show} house={editedHouse} onHide={handleClose} />
+      {editedHouse && <EditModal show={showModal} house={editedHouse} onHide={()=>(setShowModal(false))} />}
     </Fragment>
   );
 }
