@@ -2,12 +2,12 @@ import { React, useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-export function EditModal({ show, house, onHide }) {
+export function EditModal({ show, house, onHide, onAfterSubmit }) {
   const [comment, setComment] = useState("");
   
   useEffect(() => {
     setComment(house.comment);
-  }, [house.comment]);
+  }, [house]);
 
   const handleCommentChange = (e) => {
     setComment(e.currentTarget.value);
@@ -28,6 +28,7 @@ export function EditModal({ show, house, onHide }) {
       if (!response.ok) {
         throw new Error(`${response.status}, ${response.statusText}`);
       }
+      onAfterSubmit();
     })
     .catch(error => {
       alert(`更新失敗:${error.message}`);
@@ -118,5 +119,6 @@ export function EditModal({ show, house, onHide }) {
 EditModal.propTypes = {
   show: PropTypes.bool.isRequired, 
   house: PropTypes.object.isRequired,
-  onHide: PropTypes.func.isRequired 
+  onHide: PropTypes.func.isRequired,
+  onAfterSubmit: PropTypes.func.isRequired
 }

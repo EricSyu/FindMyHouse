@@ -60,7 +60,7 @@ export function HouseTable() {
   return (
     <Fragment>
       <Table columns={columns} dataSource={houses} rowKey={house => house.id} scroll={{ x: 'max-content' }} />
-      {editedHouse && <EditModal show={showModal} house={editedHouse} onHide={()=>(setShowModal(false))} />}
+      {editedHouse && <EditModal show={showModal} house={editedHouse} onHide={()=>(setShowModal(false))} onAfterSubmit={() => (fetchHouseData())} />}
     </Fragment>
   );
 }
