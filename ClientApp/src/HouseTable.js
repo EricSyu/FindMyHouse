@@ -3,6 +3,7 @@ import { Table } from 'antd';
 import { EditModal } from './EditModal'
 
 import 'antd/dist/antd.css';
+import './EditModal.css'
 
 export function HouseTable() {
   const [houses, setHouses] = useState([]);
@@ -45,10 +46,17 @@ export function HouseTable() {
   }
 
   function renderComment(text, row, index) {
+    let addBtn = (
+      <button type="button" className="btn btn-outline-primary" onClick={() => editComment(row)}>新增</button>
+    );
+    let textField = (
+      <div className="comment-text-cell" onClick={() => editComment(row)} >
+        {text}
+      </div>
+    );
+
     return (
-      <button type="button" className="btn btn-outline-primary" onClick={() => editComment(row)} >
-        {text ? text : "新增"}
-      </button>
+      text ? textField : addBtn
     );
   }
 
