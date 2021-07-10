@@ -2,6 +2,8 @@ import { React, useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+import './EditModal.css';
+
 export function EditModal({ show, house, onHide, onAfterSubmit }) {
   const [comment, setComment] = useState("");
   

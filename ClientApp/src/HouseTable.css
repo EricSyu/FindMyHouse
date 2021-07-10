@@ -1,0 +1,7 @@
+.table-row-close {
+    background-color: rgb(200, 200, 200);
+}
+
+.table-row-close:hover > td {
+    background-color: rgb(200, 200, 200) !important;
+}

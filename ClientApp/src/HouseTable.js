@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import { EditModal } from './EditModal'
 
 import 'antd/dist/antd.css';
-import './EditModal.css'
+import './HouseTable.css';
 
 export function HouseTable() {
   const [houses, setHouses] = useState([]);
@@ -60,14 +60,30 @@ export function HouseTable() {
     );
   }
 
-  function editComment(house) {
+  const editComment = function(house) {
     setEditedHouse(house);
     setShowModal(true);
   }
 
+  const rowClassName = function(record, index) {
+    const rowCloseCss = "table-row-close";
+    let rowClass = "";
+    if(record.status === "Close") {
+      rowClass += rowCloseCss;
+    }
+    return rowClass;
+  }
+
   return (
     <Fragment>
-      <Table columns={columns} dataSource={houses} rowKey={house => house.id} scroll={{ x: 'max-content' }} />
+      <Table 
+        columns={columns} 
+        dataSource={houses} 
+        rowKey={house => house.id} 
+        scroll={{ x: 'max-content' }}
+        rowClassName={rowClassName}
+        pagination={{position: ['none']}}
+      />
       {editedHouse && <EditModal show={showModal} house={editedHouse} onHide={()=>(setShowModal(false))} onAfterSubmit={() => (fetchHouseData())} />}
     </Fragment>
   );
