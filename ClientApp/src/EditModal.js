@@ -18,13 +18,17 @@ export function EditModal({ show, house, onHide, onAfterSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch(`api/House/${house.id}`, {
-      method: "PUT", 
+      method: "PATCH", 
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({
-        comment: comment
-      })
+      body: JSON.stringify([
+        {
+          "op": "replace",
+          "path": "/comment",
+          "value": comment
+        }
+      ])
     })
     .then(response => {
       if (!response.ok) {

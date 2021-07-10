@@ -26,7 +26,10 @@ namespace HouseViewer
                 options.UseMySql(Configuration.GetConnectionString("Default"), new MySqlServerVersion(new Version(8, 0, 25)));
             });
 
-            services.AddControllers();
+            services
+                .AddControllers()
+                .AddNewtonsoftJson();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HouseViewer", Version = "v1" });

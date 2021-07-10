@@ -21,6 +21,7 @@ export function HouseTable() {
     { dataIndex: 'price', key: 'price', title: '總價(萬)' },
     { dataIndex: 'comment', key: 'comment', title: '備註', render: renderComment },
     { dataIndex: 'link', key: 'link', title: '連結', render: renderLink },
+    { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking },
     { dataIndex: 'dataFrom', key: 'dataFrom', title: '資料來源' },
     { dataIndex: 'recordTime', key: 'recordTime', title: '紀錄時間' }
   ];
@@ -37,17 +38,33 @@ export function HouseTable() {
     setHouses(jsonData);
   }
 
+  function renderRanking(text, row, index) {
+    return (
+      <div>
+        <button type="button" className="btn btn-outline-success btn-sm mr-1" onClick={() => (modifyFavoriteRanking(row.id, true))}>
+          <i className="bi bi-arrow-up"></i>
+        </button>
+        <button type="button" className="btn btn-outline-success btn-sm" onClick={() => (modifyFavoriteRanking(row.id, false))}>
+          <i className="bi bi-arrow-down"></i>
+        </button>
+      </div>
+    );
+  }
+
   function renderLink(text) {
     return (
         <a href={text} target="_blank" rel="noopener noreferrer">
-          <i className="bi bi-link-45deg"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-link-45deg" viewBox="0 0 16 16">
+            <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+            <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"/>
+          </svg>
         </a>
-    )
+    );
   }
 
   function renderComment(text, row, index) {
     let addBtn = (
-      <button type="button" className="btn btn-outline-primary" onClick={() => editComment(row)}>新增</button>
+      <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => editComment(row)}>新增</button>
     );
     let textField = (
       <div className="comment-text-cell" onClick={() => editComment(row)} >
@@ -60,12 +77,27 @@ export function HouseTable() {
     );
   }
 
-  const editComment = function(house) {
+  function editComment(house) {
     setEditedHouse(house);
     setShowModal(true);
   }
 
-  const rowClassName = function(record, index) {
+  function modifyFavoriteRanking(id, isUp) {
+    fetch(`/api/House/ranking/${id}/${isUp}`, {
+      method: "PATCH"
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`${response.status}, ${response.statusText}`);
+      }
+      fetchHouseData()
+    })
+    .catch(error => {
+      alert(`更新失敗:${error.message}`);
+    })
+  }
+
+  function rowClassName(record, index) {
     const rowCloseCss = "table-row-close";
     let rowClass = "";
     if(record.status === "Close") {

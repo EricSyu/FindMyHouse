@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.Mysql" Version="5.0.0" />
     <PackageReference Include="ValueInjecter" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
   </ItemGroup>
 
 </Project>

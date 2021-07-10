@@ -7,6 +7,7 @@ using HouseViewer.Models;
 using HouseViewer.ViewModels;
 using Omu.ValueInjecter;
 using WebApi.ViewModels;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace HouseViewer.Controllers
 {
@@ -25,6 +26,7 @@ namespace HouseViewer.Controllers
         public ActionResult<IEnumerable<HouseRead>> GetHouses()
         {
             var houses = searchHouseAppContext.Houses
+                            .OrderBy(h => h.FavoriteRanking)
                             .Select(h => new HouseRead().InjectFrom(h) as HouseRead)
                             .ToList();
 
@@ -55,6 +57,46 @@ namespace HouseViewer.Controllers
             }
 
             house.InjectFrom(model);
+            searchHouseAppContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult PatchHouse(string id, [FromBody] JsonPatchDocument<House> patchDoc)
+        {
+            var house = searchHouseAppContext.Houses
+                    .Where(h => h.Id == id)
+                    .FirstOrDefault();
+
+            if (house == null || patchDoc == null)
+            {
+                return NoContent();
+            }
+
+            patchDoc.ApplyTo(house, ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            searchHouseAppContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPatch("ranking/{id}/{isUp}")]
+        public IActionResult IncreaseRanking(string id, bool isUp)
+        {
+            var house = searchHouseAppContext.Houses
+                            .Where(h => h.Id == id)
+                            .FirstOrDefault();
+
+            if (house == null)
+            {
+                NoContent();
+            }
+
+            var modified = house.FavoriteRanking + 1 * (isUp ? -1 : 1);
+            house.FavoriteRanking = modified;
             searchHouseAppContext.SaveChanges();
             return Ok();
         }
