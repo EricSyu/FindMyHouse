@@ -1,12 +1,12 @@
 import { React, useState, useEffect, Fragment } from 'react';
 import { Table } from 'antd';
-import { EditModal } from './EditModal'
+import { EditModal } from './EditModal';
+import PropTypes from 'prop-types';
 
 import 'antd/dist/antd.css';
 import './HouseTable.css';
 
-export function HouseTable() {
-  const [houses, setHouses] = useState([]);
+export function HouseTable({ houses, displayRankingCol, refresh }) {
   const columns = [
     { dataIndex: 'type', key: 'type', title: '類型' },
     { dataIndex: 'shape', key: 'shape', title: '型態' },
@@ -21,21 +21,15 @@ export function HouseTable() {
     { dataIndex: 'price', key: 'price', title: '總價(萬)' },
     { dataIndex: 'comment', key: 'comment', title: '備註', render: renderComment },
     { dataIndex: 'link', key: 'link', title: '連結', render: renderLink },
-    { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking },
     { dataIndex: 'dataFrom', key: 'dataFrom', title: '資料來源' },
     { dataIndex: 'recordTime', key: 'recordTime', title: '紀錄時間' }
   ];
   const [showModal, setShowModal] = useState(false);
   const [editedHouse, setEditedHouse] = useState(null);
 
-  useEffect(() => {
-    fetchHouseData();
-  }, []);
-  
-  async function fetchHouseData() {
-    let response = await fetch("/api/House");
-    let jsonData = await response.json();
-    setHouses(jsonData);
+  if (displayRankingCol) {
+    let rankingCol = { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking };
+    columns.slice(0, 0, rankingCol);
   }
 
   function renderRanking(text, row, index) {
@@ -90,7 +84,7 @@ export function HouseTable() {
       if (!response.ok) {
         throw new Error(`${response.status}, ${response.statusText}`);
       }
-      fetchHouseData()
+      refresh();
     })
     .catch(error => {
       alert(`更新失敗:${error.message}`);
@@ -116,7 +110,13 @@ export function HouseTable() {
         rowClassName={rowClassName}
         pagination={{position: ['none']}}
       />
-      {editedHouse && <EditModal show={showModal} house={editedHouse} onHide={()=>(setShowModal(false))} onAfterSubmit={() => (fetchHouseData())} />}
+      {editedHouse && <EditModal show={showModal} house={editedHouse} onHide={()=>(setShowModal(false))} onAfterSubmit={() => (refresh())} />}
     </Fragment>
   );
+}
+
+HouseTable.propTypes = {
+  houses: PropTypes.object.isRequired,
+  displayRankingCol: PropTypes.bool.isRequired, 
+  refresh: PropTypes.func.isRequired
 }

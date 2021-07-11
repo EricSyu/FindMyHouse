@@ -17,7 +17,7 @@ export function EditModal({ show, house, onHide, onAfterSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`api/House/${house.id}`, {
+    fetch(`/api/House/${house.id}`, {
       method: "PATCH", 
       headers: {
         'content-type': 'application/json'

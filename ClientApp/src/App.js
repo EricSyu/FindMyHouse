@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useState, useEffect } from 'react';
 import { Navbar, Container, Row, Col, Tabs, Tab } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
@@ -36,16 +36,42 @@ function App() {
 }
 
 function Home() {
+  const [houses, setHouses] = useState([]);
+  const [favoriteHouses, setFavoriteHouses] = useState([]);
+  const [trashHouses, setTrashHouses] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await fetch("/api/House");
+      let data = await response.json();
+      console.log(data);
+      let housesData = data.filter((item, index, array) => item.favoriteRanking === -1);
+      let favoriteData = data.filter((item, index, array) => item.favoriteRanking > 0);
+      let trashData = data.filter((item, index, array) => item.favoriteRanking === -2);
+      
+      setHouses(housesData);
+      setFavoriteHouses(favoriteData);
+      setTrashHouses(trashData);
+    }
+
+    fetchData();
+  }, [refreshKey]);
+
+  function refresh() {
+    setRefreshKey(oldKey => !oldKey);
+  }  
+
   return (
     <Tabs defaultActiveKey="list" className="mb-3 nav-fill home-tabs">
       <Tab eventKey="list" title="房屋清單">
-        <HouseTable />
+        <HouseTable houses={houses} displayRankingCol={false} refresh={refresh} />
       </Tab>
       <Tab eventKey="favorite" title="喜愛清單">
-        <h2>favorite</h2>
+        <HouseTable houses={favoriteHouses} displayRankingCol={true} refresh={refresh} />
       </Tab>
       <Tab eventKey="trash" title="垃圾桶">
-        <h2>trash</h2>
+        <HouseTable houses={trashHouses} displayRankingCol={false} refresh={refresh} />
       </Tab>
     </Tabs>
   );
