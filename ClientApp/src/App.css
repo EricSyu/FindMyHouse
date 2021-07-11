@@ -1,0 +1,12 @@
+@media screen and (max-width: 768px) {
+    .home-tabs {
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        margin-bottom: 0px !important;
+    }
+
+    .home-tabs > a {
+        padding: 1rem 1.5rem;
+    }
+}

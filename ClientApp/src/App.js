@@ -37,29 +37,17 @@ function App() {
 
 function Home() {
   return (
-    <Container fluid className="mt-1">
-      <Row>
-        <Col>
-          <Tabs defaultActiveKey="list" className="mb-3 nav-fill">
-            <Tab eventKey="list" title="房屋清單">
-              <Container fluid>
-                <Row>
-                  <Col>
-                    <HouseTable />
-                  </Col>
-                </Row>
-              </Container>
-            </Tab>
-            <Tab eventKey="favorite" title="喜愛清單">
-              <h2>favorite</h2>
-            </Tab>
-            <Tab eventKey="trash" title="垃圾桶">
-              <h2>trash</h2>
-            </Tab>
-          </Tabs>
-        </Col>
-      </Row>
-    </Container>
+    <Tabs defaultActiveKey="list" className="mb-3 nav-fill home-tabs">
+      <Tab eventKey="list" title="房屋清單">
+        <HouseTable />
+      </Tab>
+      <Tab eventKey="favorite" title="喜愛清單">
+        <h2>favorite</h2>
+      </Tab>
+      <Tab eventKey="trash" title="垃圾桶">
+        <h2>trash</h2>
+      </Tab>
+    </Tabs>
   );
 }
 
