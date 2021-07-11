@@ -36,7 +36,7 @@ function App() {
 }
 
 function Home() {
-  const [houses, setHouses] = useState([]);
+  const [searchedHouses, setSearchedHouses] = useState([]);
   const [favoriteHouses, setFavoriteHouses] = useState([]);
   const [trashHouses, setTrashHouses] = useState([]);
   const [refreshKey, setRefreshKey] = useState(false);
@@ -45,12 +45,12 @@ function Home() {
     const fetchData = async () => {
       let response = await fetch("/api/House");
       let data = await response.json();
-      console.log(data);
-      let housesData = data.filter((item, index, array) => item.favoriteRanking === -1);
+      
+      let searchedData = data.filter((item, index, array) => item.favoriteRanking === -1);
       let favoriteData = data.filter((item, index, array) => item.favoriteRanking > 0);
       let trashData = data.filter((item, index, array) => item.favoriteRanking === -2);
       
-      setHouses(housesData);
+      setSearchedHouses(searchedData);
       setFavoriteHouses(favoriteData);
       setTrashHouses(trashData);
     }
@@ -63,9 +63,9 @@ function Home() {
   }  
 
   return (
-    <Tabs defaultActiveKey="list" className="mb-3 nav-fill home-tabs">
-      <Tab eventKey="list" title="房屋清單">
-        <HouseTable houses={houses} displayRankingCol={false} refresh={refresh} />
+    <Tabs defaultActiveKey="searched" className="mb-3 nav-fill home-tabs">
+      <Tab eventKey="searched" title="房屋清單">
+        <HouseTable houses={searchedHouses} displayRankingCol={false} refresh={refresh} />
       </Tab>
       <Tab eventKey="favorite" title="喜愛清單">
         <HouseTable houses={favoriteHouses} displayRankingCol={true} refresh={refresh} />
