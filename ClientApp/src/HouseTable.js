@@ -33,7 +33,7 @@ export function HouseTable() {
   }, []);
   
   async function fetchHouseData() {
-    let response = await fetch("api/House");
+    let response = await fetch("/api/House");
     let jsonData = await response.json();
     setHouses(jsonData);
   }
