@@ -96,6 +96,15 @@ namespace HouseViewer.Controllers
             }
 
             var modified = house.FavoriteRanking + 1 * (isUp ? -1 : 1);
+            var otherHouse = searchHouseAppContext.Houses
+                                .Where(h => h.FavoriteRanking == modified)
+                                .FirstOrDefault();
+            if (otherHouse == null)
+            {
+                BadRequest("Other House is not found");
+            }
+
+            otherHouse.FavoriteRanking = house.FavoriteRanking;
             house.FavoriteRanking = modified;
             searchHouseAppContext.SaveChanges();
             return Ok();

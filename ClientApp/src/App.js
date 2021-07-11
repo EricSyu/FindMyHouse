@@ -65,13 +65,13 @@ function Home() {
   return (
     <Tabs defaultActiveKey="searched" className="mb-3 nav-fill home-tabs">
       <Tab eventKey="searched" title="房屋清單">
-        <HouseTable houses={searchedHouses} displayRankingCol={false} refresh={refresh} />
+        <HouseTable houses={searchedHouses} mode={'searched'} refresh={refresh} />
       </Tab>
       <Tab eventKey="favorite" title="喜愛清單">
-        <HouseTable houses={favoriteHouses} displayRankingCol={true} refresh={refresh} />
+        <HouseTable houses={favoriteHouses} mode={'favorite'} refresh={refresh} />
       </Tab>
       <Tab eventKey="trash" title="垃圾桶">
-        <HouseTable houses={trashHouses} displayRankingCol={false} refresh={refresh} />
+        <HouseTable houses={trashHouses} mode={'trash'} refresh={refresh} />
       </Tab>
     </Tabs>
   );

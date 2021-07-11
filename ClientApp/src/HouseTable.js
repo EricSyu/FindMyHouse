@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import './HouseTable.css';
 
-export function HouseTable({ houses, displayRankingCol, refresh }) {
+export function HouseTable({ houses, mode, refresh }) {
   const columns = [
     { dataIndex: 'type', key: 'type', title: '類型' },
     { dataIndex: 'shape', key: 'shape', title: '型態' },
@@ -27,27 +27,42 @@ export function HouseTable({ houses, displayRankingCol, refresh }) {
   const [showModal, setShowModal] = useState(false);
   const [editedHouse, setEditedHouse] = useState(null);
 
-  if (displayRankingCol) {
-    let rankingCol = { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking };
-    columns.slice(0, 0, rankingCol);
+  if (mode) {
+    switch (mode) {
+      case 'searched':
+        
+        break;
+      case 'favorite':
+        let rankingCol = { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking };
+        columns.splice(0, 0, rankingCol);
+        break;
+      case 'trash':
+        break;
+      default:
+        break;
+    }
   }
 
-  function renderRanking(text, row, index) {
+  function renderRanking(item, row, index) {
+    let isUpDisabled = index === 0;
+    let isDownDisabled = index === houses.length - 1;
+
     return (
       <div>
-        <button type="button" className="btn btn-outline-success btn-sm mr-1" onClick={() => (modifyFavoriteRanking(row.id, true))}>
+        <button type="button" className="btn btn-outline-success btn-sm mr-1" disabled={isUpDisabled} onClick={() => (modifyFavoriteRanking(row.id, true))}>
           <i className="bi bi-arrow-up"></i>
         </button>
-        <button type="button" className="btn btn-outline-success btn-sm" onClick={() => (modifyFavoriteRanking(row.id, false))}>
+        <button type="button" className="btn btn-outline-success btn-sm" disabled={isDownDisabled} onClick={() => (modifyFavoriteRanking(row.id, false))}>
           <i className="bi bi-arrow-down"></i>
         </button>
+        <strong className="ml-3">{item}</strong>
       </div>
     );
   }
 
-  function renderLink(text) {
+  function renderLink(item) {
     return (
-        <a href={text} target="_blank" rel="noopener noreferrer">
+        <a href={item} target="_blank" rel="noopener noreferrer">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-link-45deg" viewBox="0 0 16 16">
             <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
             <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"/>
@@ -56,18 +71,18 @@ export function HouseTable({ houses, displayRankingCol, refresh }) {
     );
   }
 
-  function renderComment(text, row, index) {
+  function renderComment(item, row, index) {
     let addBtn = (
       <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => editComment(row)}>新增</button>
     );
     let textField = (
       <div className="comment-text-cell" onClick={() => editComment(row)} >
-        {text}
+        {item}
       </div>
     );
 
     return (
-      text ? textField : addBtn
+      item ? textField : addBtn
     );
   }
 
@@ -116,7 +131,7 @@ export function HouseTable({ houses, displayRankingCol, refresh }) {
 }
 
 HouseTable.propTypes = {
-  houses: PropTypes.object.isRequired,
-  displayRankingCol: PropTypes.bool.isRequired, 
+  houses: PropTypes.array.isRequired,
+  mode: PropTypes.string.isRequired, 
   refresh: PropTypes.func.isRequired
 }
