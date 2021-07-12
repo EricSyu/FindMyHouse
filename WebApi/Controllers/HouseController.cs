@@ -110,6 +110,22 @@ namespace HouseViewer.Controllers
             return Ok();
         }
 
+        [HttpPatch("discard/{id}")]
+        public IActionResult Discard(string id)
+        {
+            var house = searchHouseAppContext.Houses
+                            .Where(h => h.Id == id)
+                            .FirstOrDefault();
+            if (house == null)
+            {
+                return NoContent();
+            }
+
+            house.FavoriteRanking = -2;
+            searchHouseAppContext.SaveChanges();
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public ActionResult<House> DeleteHouseById(int id)
         {
