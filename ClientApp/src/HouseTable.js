@@ -28,7 +28,7 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
   const [editedHouse, setEditedHouse] = useState(null);
 
   if (mode) {
-    let trashCol = { key: 'trash', title: '丟棄', render: renderTrash };
+    let trashCol = { key: 'trash', title: '', render: renderTrash };
     let rankingCol = { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking };
     let addFavoriteCol = { key: 'addFavorite', title: '', render: renderAddFavorite };
     let replyCol = { key: 'recover', title: '', render: renderReply };
@@ -39,7 +39,8 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
         columns.splice(columns.length, 0, trashCol);
         break;
       case 'favorite':
-        columns.splice(0, 0, rankingCol);
+        columns.splice(0, 0, replyCol);
+        columns.splice(1, 0, rankingCol);
         columns.splice(columns.length, 0, trashCol);
         break;
       case 'trash':

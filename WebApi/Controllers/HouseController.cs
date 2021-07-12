@@ -122,19 +122,22 @@ namespace HouseViewer.Controllers
             }
             
             if (house.FavoriteRanking > 0)
-            {
-                // reorder favorite list
-                var favoriteList = searchHouseAppContext.Houses
-                                    .Where(h => h.FavoriteRanking > 0 && h.Id != id).OrderBy(h => h.FavoriteRanking)
-                                    .ToList();
-                for (int i = 0; i < favoriteList.Count; i++)
-                {
-                    favoriteList[i].FavoriteRanking = i + 1;
-                }
-            }
+                reorderFavoriteRanking(id);
+
             house.FavoriteRanking = -2;
             searchHouseAppContext.SaveChanges();
             return Ok();
+        }
+
+        private void reorderFavoriteRanking(string excludeId)
+        {
+            var favoriteList = searchHouseAppContext.Houses
+                                .Where(h => h.FavoriteRanking > 0 && h.Id != excludeId).OrderBy(h => h.FavoriteRanking)
+                                .ToList();
+            for (int i = 0; i < favoriteList.Count; i++)
+            {
+                favoriteList[i].FavoriteRanking = i + 1;
+            }
         }
 
         [HttpPatch("addFavoriteList/{id}")]
@@ -165,6 +168,9 @@ namespace HouseViewer.Controllers
                 return NoContent();
             }
 
+            if (house.FavoriteRanking > 0)
+                reorderFavoriteRanking(id);
+            
             house.FavoriteRanking = -1;
             searchHouseAppContext.SaveChanges();
             return Ok();
