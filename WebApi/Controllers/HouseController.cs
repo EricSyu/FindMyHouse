@@ -92,7 +92,7 @@ namespace HouseViewer.Controllers
 
             if (house == null)
             {
-                NoContent();
+                return NoContent();
             }
 
             var modified = house.FavoriteRanking + 1 * (isUp ? -1 : 1);
@@ -101,7 +101,7 @@ namespace HouseViewer.Controllers
                                 .FirstOrDefault();
             if (otherHouse == null)
             {
-                BadRequest("Other House is not found");
+                return BadRequest("Other House is not found");
             }
 
             otherHouse.FavoriteRanking = house.FavoriteRanking;
@@ -120,7 +120,18 @@ namespace HouseViewer.Controllers
             {
                 return NoContent();
             }
-
+            
+            if (house.FavoriteRanking > 0)
+            {
+                // reorder favorite list
+                var favoriteList = searchHouseAppContext.Houses
+                                    .Where(h => h.FavoriteRanking > 0 && h.Id != id).OrderBy(h => h.FavoriteRanking)
+                                    .ToList();
+                for (int i = 0; i < favoriteList.Count; i++)
+                {
+                    favoriteList[i].FavoriteRanking = i + 1;
+                }
+            }
             house.FavoriteRanking = -2;
             searchHouseAppContext.SaveChanges();
             return Ok();
@@ -138,7 +149,23 @@ namespace HouseViewer.Controllers
             }
 
             int maxRanking = searchHouseAppContext.Houses.Max(h => h.FavoriteRanking);
-            house.FavoriteRanking = maxRanking + 1;
+            house.FavoriteRanking = maxRanking > 0 ? maxRanking + 1 : 1;
+            searchHouseAppContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPatch("reply/{id}")]
+        public IActionResult Reply2Searched(string id)
+        {
+            var house = searchHouseAppContext.Houses
+                            .Where(h => h.Id == id)
+                            .FirstOrDefault();
+            if (house == null)
+            {
+                return NoContent();
+            }
+
+            house.FavoriteRanking = -1;
             searchHouseAppContext.SaveChanges();
             return Ok();
         }

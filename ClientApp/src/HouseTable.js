@@ -31,6 +31,7 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
     let trashCol = { key: 'trash', title: '丟棄', render: renderTrash };
     let rankingCol = { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking };
     let addFavoriteCol = { key: 'addFavorite', title: '', render: renderAddFavorite };
+    let replyCol = { key: 'recover', title: '', render: renderReply };
 
     switch (mode) {
       case 'searched':
@@ -42,10 +43,40 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
         columns.splice(columns.length, 0, trashCol);
         break;
       case 'trash':
+        columns.splice(0, 0, replyCol);
         break;
       default:
         break;
     }
+  }
+
+  function renderReply(item, row, index) {
+    return (
+      <a href="#" className="text-success link-success" onClick={() => Reply2Searched(row.id)}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-reply-fill" viewBox="0 0 16 16">
+          <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
+        </svg>
+      </a>
+    )
+  }
+
+  function Reply2Searched(id) {
+    setLoading(true);
+    fetch(`/api/House/reply/${id}`, {
+      method: "PATCH"
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`${response.status}, ${response.statusText}`);
+      }
+      refresh();
+    })
+    .catch(error => {
+      alert(`更新失敗:${error.message}`);
+    })
+    .finally(() => {
+      setLoading(false);
+    })
   }
 
   function renderAddFavorite(item, row, index) {
