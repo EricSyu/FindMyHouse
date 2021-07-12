@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import './HouseTable.css';
 
-export function HouseTable({ houses, mode, refresh }) {
+export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
   const columns = [
     { dataIndex: 'type', key: 'type', title: '類型' },
     { dataIndex: 'shape', key: 'shape', title: '型態' },
@@ -92,6 +92,7 @@ export function HouseTable({ houses, mode, refresh }) {
   }
 
   function modifyFavoriteRanking(id, isUp) {
+    setLoading(true);
     fetch(`/api/House/ranking/${id}/${isUp}`, {
       method: "PATCH"
     })
@@ -103,6 +104,9 @@ export function HouseTable({ houses, mode, refresh }) {
     })
     .catch(error => {
       alert(`更新失敗:${error.message}`);
+    })
+    .finally(() => {
+      setLoading(false);
     })
   }
 
@@ -124,6 +128,7 @@ export function HouseTable({ houses, mode, refresh }) {
         scroll={{ x: 'max-content' }}
         rowClassName={rowClassName}
         pagination={{position: ['none']}}
+        loading={loading}
       />
       {editedHouse && <EditModal show={showModal} house={editedHouse} onHide={()=>(setShowModal(false))} onAfterSubmit={() => (refresh())} />}
     </Fragment>
@@ -133,5 +138,7 @@ export function HouseTable({ houses, mode, refresh }) {
 HouseTable.propTypes = {
   houses: PropTypes.array.isRequired,
   mode: PropTypes.string.isRequired, 
-  refresh: PropTypes.func.isRequired
+  refresh: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired
 }

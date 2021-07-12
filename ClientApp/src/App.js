@@ -40,9 +40,11 @@ function Home() {
   const [favoriteHouses, setFavoriteHouses] = useState([]);
   const [trashHouses, setTrashHouses] = useState([]);
   const [refreshKey, setRefreshKey] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       let response = await fetch("/api/House");
       let data = await response.json();
       
@@ -53,6 +55,7 @@ function Home() {
       setSearchedHouses(searchedData);
       setFavoriteHouses(favoriteData);
       setTrashHouses(trashData);
+      setLoading(false);
     }
 
     fetchData();
@@ -65,13 +68,13 @@ function Home() {
   return (
     <Tabs defaultActiveKey="searched" className="mb-3 nav-fill home-tabs">
       <Tab eventKey="searched" title="房屋清單">
-        <HouseTable houses={searchedHouses} mode={'searched'} refresh={refresh} />
+        <HouseTable houses={searchedHouses} mode={'searched'} refresh={refresh} loading={loading} setLoading={(e) => setLoading(e)} />
       </Tab>
       <Tab eventKey="favorite" title="喜愛清單">
-        <HouseTable houses={favoriteHouses} mode={'favorite'} refresh={refresh} />
+        <HouseTable houses={favoriteHouses} mode={'favorite'} refresh={refresh} loading={loading} setLoading={(e) => setLoading(e)} />
       </Tab>
       <Tab eventKey="trash" title="垃圾桶">
-        <HouseTable houses={trashHouses} mode={'trash'} refresh={refresh} />
+        <HouseTable houses={trashHouses} mode={'trash'} refresh={refresh} loading={loading} setLoading={(e) => setLoading(e)} />
       </Tab>
     </Tabs>
   );
