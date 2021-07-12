@@ -29,13 +29,15 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
 
   if (mode) {
     let trashCol = { key: 'trash', title: '丟棄', render: renderTrash };
+    let rankingCol = { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking };
+    let addFavoriteCol = { key: 'addFavorite', title: '', render: renderAddFavorite };
 
     switch (mode) {
       case 'searched':
+        columns.splice(0, 0, addFavoriteCol);
         columns.splice(columns.length, 0, trashCol);
         break;
       case 'favorite':
-        let rankingCol = { dataIndex: 'favoriteRanking', key: 'favoriteRanking', title: '喜愛程度', render: renderRanking };
         columns.splice(0, 0, rankingCol);
         columns.splice(columns.length, 0, trashCol);
         break;
@@ -44,6 +46,35 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
       default:
         break;
     }
+  }
+
+  function renderAddFavorite(item, row, index) {
+    return (
+      <a href="#" className="text-danger link-danger" onClick={() => addFavoriteList(row.id)}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-heart-fill" viewBox="0 0 16 16">
+          <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+        </svg>
+      </a>
+    )
+  }
+
+  function addFavoriteList(id) {
+    setLoading(true);
+    fetch(`/api/House/addFavoriteList/${id}`, {
+      method: "PATCH"
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`${response.status}, ${response.statusText}`);
+      }
+      refresh();
+    })
+    .catch(error => {
+      alert(`更新失敗:${error.message}`);
+    })
+    .finally(() => {
+      setLoading(false);
+    })
   }
 
   function renderTrash(item, row, index) {

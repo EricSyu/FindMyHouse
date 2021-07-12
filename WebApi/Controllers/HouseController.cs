@@ -126,6 +126,23 @@ namespace HouseViewer.Controllers
             return Ok();
         }
 
+        [HttpPatch("addFavoriteList/{id}")]
+        public IActionResult AddFavoriteList(string id)
+        {
+            var house = searchHouseAppContext.Houses
+                            .Where(h => h.Id == id)
+                            .FirstOrDefault();
+            if (house == null)
+            {
+                return NoContent();
+            }
+
+            int maxRanking = searchHouseAppContext.Houses.Max(h => h.FavoriteRanking);
+            house.FavoriteRanking = maxRanking + 1;
+            searchHouseAppContext.SaveChanges();
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public ActionResult<House> DeleteHouseById(int id)
         {
