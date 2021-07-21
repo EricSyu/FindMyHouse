@@ -4,6 +4,9 @@
         bottom: 0px;
         width: 100%;
         margin-bottom: 0px !important;
+        z-index: 10;
+        background-color: #fff;
+        border-top: solid 1px #f1f0f0;
     }
 
     .home-tabs > a {

@@ -223,7 +223,7 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
         rowKey={house => house.id} 
         scroll={{ x: 'max-content' }}
         rowClassName={rowClassName}
-        pagination={{position: ['none']}}
+        pagination={false}
         loading={loading}
       />
       {editedHouse && <EditModal show={showModal} house={editedHouse} onHide={()=>(setShowModal(false))} onAfterSubmit={() => (refresh())} />}
