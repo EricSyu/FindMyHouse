@@ -12,7 +12,7 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
     { dataIndex: 'shape', key: 'shape', title: '型態' },
     { dataIndex: 'section', key: 'section', title: '區域' },
     { dataIndex: 'title', key: 'title', title: '標題' },
-    { dataIndex: 'carport', key: 'carport', title: '車位' },
+    // { dataIndex: 'carport', key: 'carport', title: '車位' },
     { dataIndex: 'room', key: 'room', title: '格局' },
     { dataIndex: 'floor', key: 'floor', title: '樓層' },
     { dataIndex: 'area', key: 'area', title: '坪數' },
