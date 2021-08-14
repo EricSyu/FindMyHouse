@@ -10,6 +10,7 @@ pipeline {
       }
       steps {
         sh '''cd ClientApp/
+npm install
 npm run build'''
       }
     }
