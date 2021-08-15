@@ -5,6 +5,7 @@ pipeline {
       agent {
         docker {
           image 'node:latest'
+          args '-v /nginx_www:/nginx_www'
         }
 
       }
@@ -19,7 +20,6 @@ pwd'''
 ls
 cd ClientApp/
 ls build/
-ls /
 ls /nginx_www/
 '''
       }
