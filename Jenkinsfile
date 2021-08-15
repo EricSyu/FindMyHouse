@@ -10,16 +10,15 @@ pipeline {
       }
       steps {
         sh '''cd ClientApp/
-npm install
-npm run build'''
+'''
       }
     }
 
     stage('deploy ClientApp') {
       steps {
         sh '''deploy_dir=\'/nginx_www/house_viewer/\'
-rm -rfv $deploy_dir
-cp -rv build/ $deploy_dir'''
+ls
+ls $deploy_dir'''
       }
     }
 
