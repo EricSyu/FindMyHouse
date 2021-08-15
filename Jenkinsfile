@@ -10,17 +10,12 @@ pipeline {
 
       }
       steps {
-        sh '''pwd
-cd ClientApp/
-mkdir build/
-echo ss > build/ss.txt
-ls
-pwd'''
-        sh '''pwd
-ls
-cd ClientApp/
-ls build/
-ls /nginx_www/
+        sh '''cd ClientApp/
+npm install
+npm run build'''
+        sh '''deploy_dir=\'/nginx_www/house_viewer/\'
+rm -rfv $deploy_dir
+cp -rv build/ $deploy_dir
 '''
       }
     }
