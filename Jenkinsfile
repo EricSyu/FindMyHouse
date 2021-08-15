@@ -9,9 +9,12 @@ pipeline {
 
       }
       steps {
-        sh '''cd ClientApp/
+        sh '''pwd
+cd ClientApp/
 mkdir build/
-echo ss > build/ss.txt'''
+echo ss > build/ss.txt
+ls
+pwd'''
       }
     }
 
