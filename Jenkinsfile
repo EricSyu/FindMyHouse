@@ -16,9 +16,10 @@ pipeline {
 
     stage('deploy ClientApp') {
       steps {
-        sh '''deploy_dir=\'/nginx_www/house_viewer/\'
-ls
-ls $deploy_dir'''
+        sh '''cd ClientApp/
+deploy_dir=\'/nginx_www/house_viewer/\'
+ls build/
+ls /nginx_www/'''
       }
     }
 
