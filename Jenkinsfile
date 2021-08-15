@@ -12,9 +12,8 @@ pipeline {
       steps {
         sh '''cd ClientApp/
 npm install
-npm run build'''
-        sh '''tar -zcvf /publish/HouseViewer_ClientApp_$(date \'+%Y%m%d%H%M\').tar.gz build
-'''
+npm run build
+tar -zcvf /publish/HouseViewer_ClientApp_$(date \'+%Y%m%d%H%M\').tar.gz build'''
       }
     }
 
