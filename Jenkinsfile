@@ -17,9 +17,9 @@ npm run build'''
 
     stage('deploy ClientApp') {
       steps {
-        sh '''deploy_dir=\'house_viewer/\'
+        sh '''deploy_dir=\'/nginx_www/house_viewer/\'
 rm -rfv $deploy_dir
-cp -rv build/ /nginx_www/$deploy_dir'''
+cp -rv build/ $deploy_dir'''
       }
     }
 
