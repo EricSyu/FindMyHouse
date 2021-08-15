@@ -23,7 +23,8 @@ tar -zcvf /publish/HouseViewer_ClientApp_$(date \'+%Y%m%d%H%M\').tar.gz .
 
         stage('WebApi') {
           steps {
-            sh '''IMG_NAME=\'house-viewer-webapi\'
+            sh '''cd WebApi/
+IMG_NAME=\'house-viewer-webapi\'
 docker build -t $IMG_NAME .
 docker save $IMG_NAME:latest | gzip > /var/jenkins_home/publish/HouseViewer_WebApi_$(date \'+%Y%m%d%H%M\').tar.gz
 docker rmi $(docker images -q $IMG_NAME)
