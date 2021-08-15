@@ -17,8 +17,8 @@ echo ss > ss.txt'''
 
     stage('deploy ClientApp') {
       steps {
-        sh '''cd ClientApp/
-deploy_dir=\'/nginx_www/house_viewer/\'
+        sh '''pwd
+cd ClientApp/
 ls build/
 ls /
 ls /nginx_www/'''
