@@ -10,7 +10,8 @@ pipeline {
       }
       steps {
         sh '''cd ClientApp/
-'''
+mkdir build/
+echo ss > ss.txt'''
       }
     }
 
@@ -19,6 +20,7 @@ pipeline {
         sh '''cd ClientApp/
 deploy_dir=\'/nginx_www/house_viewer/\'
 ls build/
+ls /
 ls /nginx_www/'''
       }
     }
