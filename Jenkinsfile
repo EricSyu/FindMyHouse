@@ -1,11 +1,11 @@
 pipeline {
   agent any
   stages {
-    stage('build ClientApp') {
+    stage('build&publish ClientApp') {
       agent {
         docker {
           image 'node:latest'
-          args '-v /nginx_www:/nginx_www'
+          args '-v /var/jenkins_home/publish:/publish'
         }
 
       }
@@ -13,9 +13,7 @@ pipeline {
         sh '''cd ClientApp/
 npm install
 npm run build'''
-        sh '''deploy_dir=\'/nginx_www/house_viewer/\'
-rm -rfv $deploy_dir
-cp -rv build/ $deploy_dir
+        sh '''tar -zcvf /publish/HouseViewer_ClientApp_$(date \'+%Y%m%d%H%M\').tar.gz build
 '''
       }
     }
