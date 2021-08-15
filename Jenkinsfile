@@ -11,13 +11,14 @@ pipeline {
       steps {
         sh '''cd ClientApp/
 mkdir build/
-echo ss > ss.txt'''
+echo ss > build/ss.txt'''
       }
     }
 
     stage('deploy ClientApp') {
       steps {
         sh '''pwd
+ls
 cd ClientApp/
 ls build/
 ls /
