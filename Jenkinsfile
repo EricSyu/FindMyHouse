@@ -22,6 +22,7 @@ tar -zcvf /publish/HouseViewer_ClientApp_$(date \'+%Y%m%d%H%M\').tar.gz .
         }
 
         stage('WebApi') {
+          agent any
           steps {
             sh '''cd WebApi/
 IMG_NAME=\'house-viewer-webapi\'
