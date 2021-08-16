@@ -8,21 +8,21 @@ import './HouseTable.css';
 
 export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
   const columns = [
-    { dataIndex: 'type', key: 'type', title: '類型' },
-    { dataIndex: 'shape', key: 'shape', title: '型態' },
-    { dataIndex: 'section', key: 'section', title: '區域' },
-    { dataIndex: 'title', key: 'title', title: '標題' },
+    { dataIndex: 'type', key: 'type', title: '類型', sorter: (a, b) => a.type.localeCompare(b.type) },
+    { dataIndex: 'shape', key: 'shape', title: '型態', sorter: (a, b) => a.shape.localeCompare(b.shape) },
+    { dataIndex: 'section', key: 'section', title: '區域', sorter: (a, b) => a.section.localeCompare(b.section) },
+    { dataIndex: 'title', key: 'title', title: '標題', sorter: (a, b) => a.title.localeCompare(b.title) },
     // { dataIndex: 'carport', key: 'carport', title: '車位' },
-    { dataIndex: 'room', key: 'room', title: '格局' },
-    { dataIndex: 'floor', key: 'floor', title: '樓層' },
-    { dataIndex: 'area', key: 'area', title: '坪數' },
-    { dataIndex: 'houseAge', key: 'houseAge', title: '屋齡' },
-    { dataIndex: 'unitPrice', key: 'unitPrice', title: '單價(萬/坪)' },
-    { dataIndex: 'price', key: 'price', title: '總價(萬)' },
-    { dataIndex: 'comment', key: 'comment', title: '備註', render: renderComment },
+    { dataIndex: 'room', key: 'room', title: '格局', sorter: (a, b) => a.room.localeCompare(b.room) },
+    { dataIndex: 'floor', key: 'floor', title: '樓層', sorter: (a, b) => a.floor.localeCompare(b.floor) },
+    { dataIndex: 'area', key: 'area', title: '坪數', sorter: (a, b) => a.area - b.area },
+    { dataIndex: 'houseAge', key: 'houseAge', title: '屋齡', sorter: (a, b) => a.houseAge - b.houseAge },
+    { dataIndex: 'unitPrice', key: 'unitPrice', title: '單價(萬/坪)', sorter: (a, b) => a.unitPrice - b.unitPrice },
+    { dataIndex: 'price', key: 'price', title: '總價(萬)', sorter: (a, b) => a.price - b.price },
+    { dataIndex: 'comment', key: 'comment', title: '備註', render: renderComment, sorter: (a, b) => a.comment.localeCompare(b.comment) },
     { dataIndex: 'link', key: 'link', title: '連結', render: renderLink },
-    { dataIndex: 'dataFrom', key: 'dataFrom', title: '資料來源' },
-    { dataIndex: 'recordTime', key: 'recordTime', title: '紀錄時間' }
+    { dataIndex: 'dataFrom', key: 'dataFrom', title: '資料來源', sorter: (a, b) => a.dataFrom.localeCompare(b.dataFrom) },
+    { dataIndex: 'recordTime', key: 'recordTime', title: '紀錄時間', sorter: (a, b) => a.recordTime.localeCompare(b.recordTime) }
   ];
   const [showModal, setShowModal] = useState(false);
   const [editedHouse, setEditedHouse] = useState(null);
@@ -42,6 +42,7 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
         columns.splice(0, 0, replyCol);
         columns.splice(1, 0, rankingCol);
         columns.splice(columns.length, 0, trashCol);
+        removeSorter(columns);
         break;
       case 'trash':
         columns.splice(0, 0, replyCol);
@@ -49,6 +50,12 @@ export function HouseTable({ houses, mode, refresh, loading, setLoading }) {
       default:
         break;
     }
+  }
+
+  function removeSorter(columns) {
+    columns.forEach(c => {
+      if (c.sorter) delete c.sorter;
+    });
   }
 
   function renderReply(item, row, index) {
