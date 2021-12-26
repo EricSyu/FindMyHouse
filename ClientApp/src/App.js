@@ -20,7 +20,7 @@ function App() {
         <div className="header">
           <Navbar bg="dark" variant="dark">
             <Container fluid>
-              <Navbar.Brand href="/">House Viewer</Navbar.Brand>
+              <Navbar.Brand href="/">Find My House</Navbar.Brand>
             </Container>
           </Navbar>
         </div>
